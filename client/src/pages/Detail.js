@@ -7,6 +7,12 @@ import spinner from '../assets/spinner.gif';
 import { useStoreContext } from '../utils/GlobalState';
 import { UPDATE_PRODUCTS } from '../utils/actions';
 import Cart from '../components/Cart';
+import {
+  REMOVE_FROM_CART,
+  UPDATE_CART_QUANTITY,
+  ADD_TO_CART,
+  UPDATE_PRODUCTS,
+} from '../utils/actions';
 
 function Detail() {
   const [state, dispatch] = useStoreContext();
@@ -17,6 +23,13 @@ const [currentProduct, setCurrentProduct] = useState({})
 const { loading, data } = useQuery(QUERY_PRODUCTS);
 
 const { products } = state;
+
+const addToCart = () => {
+  dispatch({
+    type: ADD_TO_CART,
+    product: { ...currentProduct, purchaseQuantity: 1 }
+  });
+};
 
 useEffect(() => {
   if (products.length) {
@@ -41,7 +54,7 @@ useEffect(() => {
 
           <p>
             <strong>Price:</strong>${currentProduct.price}{' '}
-            <button>Add to Cart</button>
+            <button onClick={addToCart}>Add to Cart</button>
             <button>Remove from Cart</button>
           </p>
 
