@@ -2,6 +2,8 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Category, Order } = require('../models');
 const { signToken } = require('../utils/auth');
 
+const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
 const resolvers = {
   Query: {
     categories: async () => {
@@ -50,6 +52,10 @@ const resolvers = {
       }
 
       throw new AuthenticationError('Not logged in');
+    },
+    checkout: async (parent, args, context) => {
+      const order = new Order({ products: args.product});
+      const { products } = await order.populate('products');
     }
   },
   Mutation: {
